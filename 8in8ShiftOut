@@ -1,0 +1,81 @@
+// Give each respective Input Pin a named variable
+
+byte inPin0 = A0; 
+byte inPin1 = A1;
+byte inPin2 = A2;
+byte inPin3 = A3;
+byte inPin4 = A4;
+byte inPin5 = A5;
+byte inPin6 = 2;
+byte inPin7 = 3;
+
+// Give each respective Output Pin a named variable
+// Each pin is to connect to the serial inputs of
+// the Shift Register
+
+int latchPin = 6;
+int clockPin = 7;
+int dataPin = 8;
+
+// Declaring a variable for storing the byte that
+// is going to be sent to the Shift Register
+
+byte shiftByte;
+
+void setup() {
+  
+  // Declare Input Pins to work in Input Mode
+  // reading values from the connected Push Buttons
+  
+  pinMode(inPin0, INPUT);
+  pinMode(inPin1, INPUT);
+  pinMode(inPin2, INPUT);
+  pinMode(inPin3, INPUT);
+  pinMode(inPin4, INPUT);
+  pinMode(inPin5, INPUT);
+  pinMode(inPin6, INPUT);
+  pinMode(inPin7, INPUT);
+
+  // Declare the Output Pins to work in Output
+  // Mode to the Shift Register input pins
+  
+  pinMode(latchPin, OUTPUT);
+  pinMode(clockPin, OUTPUT);
+  pinMode(dataPin, OUTPUT);
+}
+
+void loop() {
+  
+  // Read the inputs and write each bit in the
+  // byte to be sent to the Shift Register
+
+bitWrite(shiftByte, 0, digitalRead(inPin0));
+bitWrite(shiftByte, 1, digitalRead(inPin1));
+bitWrite(shiftByte, 2, digitalRead(inPin2));
+bitWrite(shiftByte, 3, digitalRead(inPin3));
+bitWrite(shiftByte, 4, digitalRead(inPin4));
+bitWrite(shiftByte, 5, digitalRead(inPin5));
+bitWrite(shiftByte, 6, digitalRead(inPin6));
+bitWrite(shiftByte, 7, digitalRead(inPin7));
+
+
+  //Shifting out the bits to the Shift Register
+
+  // Pull Latch Pin LOW before sending data
+  
+  digitalWrite(latchPin, LOW);
+
+  // Shift the bits out to the Shift Register
+  
+  shiftOut(dataPin, clockPin, LSBFIRST, shiftByte);
+
+  // Turn on the Latch Pin to move the values to 
+  // the output stage of the Shift Register
+  
+  digitalWrite(latchPin, HIGH);
+
+  // Give the process a 0,2 sec break
+
+  delay(200);
+
+}
